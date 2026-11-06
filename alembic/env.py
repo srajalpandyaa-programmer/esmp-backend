@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 from app.db.base import Base
+from app.core.config import normalize_database_url
 import app.db.models
 
 
@@ -21,6 +22,7 @@ if not database_url or database_url.startswith("******"):
         "Set a valid PostgreSQL URL in .env before running Alembic."
     )
 
+database_url = normalize_database_url(database_url)
 config.set_main_option("sqlalchemy.url", database_url.replace("%", "%%"))
 
 if config.config_file_name is not None:

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.core.config import get_settings
+from app.core.config import get_settings, normalize_database_url
 
 
 def get_session_factory() -> sessionmaker[Session]:
@@ -11,7 +11,7 @@ def get_session_factory() -> sessionmaker[Session]:
             "DATABASE_URL is still a placeholder. "
             "Set a valid PostgreSQL URL in .env before using the database."
         )
-    engine = create_engine(settings.database_url, pool_pre_ping=True)
+    engine = create_engine(normalize_database_url(settings.database_url), pool_pre_ping=True)
     return sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
